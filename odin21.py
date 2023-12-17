@@ -38,7 +38,7 @@ plots[1].grid(True)
 plt.show()
 
 print('#Рассчитайте общую выручку')
-print(np.sum(df['Цена']))
+print(sum(list(map(lambda x, y: x * y, df['Цена'], df['Количество']))))
 
 print('#Определите самый популярный продукт или категорию продуктов')
 products_and_prices = {}
