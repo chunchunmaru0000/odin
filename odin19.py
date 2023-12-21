@@ -215,7 +215,7 @@ class Shop:
                       f'in {product.get_name()}')
             else:
                 print(f'{customer.get_name()} shall not have the {product.get_name()} cuz he is not interested '
-                      f'in {product.get_name()} and he is ever yastcher, tho ll be defeated by '
+                      f'in {product.get_name()} and he is even yastcher, tho ll be defeated by '
                       f'slavyanskii zathzim yaicami')
 
 
