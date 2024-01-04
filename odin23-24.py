@@ -3,9 +3,48 @@ import datetime
 import pandas as pd
 
 
+# documentation
+
+'''
+# DatabaseManager Class
+
+## Overview
+The `DatabaseManager` class serves as a utility for interacting with a database. It provides methods to establish
+a connection, manage tables, execute queries, and perform operations such as insertion, deletion,
+and updating of records.
+## Methods
+### \_\_init\_\_()
+- Constructor method initializing the class instance.
+### connection(database_name: str)
+- Establishes a connection to the specified database. Any connection errors are handled and reported.
+### close() -> None
+- Closes the connection to the database. Any errors during the closing operation are caught and reported.
+### create_table(table_name: str, properties: dict) -> None
+- Creates a table in the database with the given name and properties. Any errors during table creation are reported.
+### insert(table_name: str, properties: dict) -> None
+- Inserts a new record into the specified table with the provided properties. This method handles different data types
+and displays an error message if the insertion fails.
+### query(request: str)
+- Executes the SQL query specified by the request and returns the results. Any exceptions raised during 
+the query execution are caught and reported.
+### delete_user_by_id(user_id: int)
+- Deletes a user from the 'users' table based on the provided user ID. It provides feedback on successful deletion 
+or reports any errors encountered.
+### update_user_by_id(user_id: int, properties: dict)
+- Updates the user with the specified ID in the 'users' table using the provided properties. The method handles 
+different data types and displays an error message if the update operation fails.
+
+This class encapsulates database management functionality and error handling, making it a 
+versatile tool for interacting with databases in various applications.
+'''
+
+
 class DatabaseManager:
-    # init используется в качестве connection к бд при создании обьекта
-    def __init__(self, database_name):
+    def __init__(self):
+        self.connect = 0
+        self.cursor = 0
+
+    def connection(self, database_name):
         try:
             self.connect = sqlite3.connect(database_name)
             self.cursor = self.connect.cursor()
@@ -58,7 +97,7 @@ class DatabaseManager:
         try:
             properties = ", ".join([f'{item[0]}={chr(39) if type(item[1]).__name__ == "str" else ""}{item[1]}{chr(39) if type(item[1]).__name__ == "str" else ""}' for item in properties.items()])
             self.cursor.execute(f'update users set {properties} where id={user_id}')
-            print(f'user с id {user_id} successfully updated')
+            print(f'user with id {user_id} successfully updated')
         except Exception as e:
             print(f'failed updation, error: {e}')
 
@@ -92,7 +131,7 @@ class Solution:
         [base.insert('users', {'name': f'чел{i}',
                                                  'age': 20+i,
                                                  'email': f'chel{i}@gmail.com'})
-         for i in range(10)]
+         for i in range(100)]
 
         base.insert('orders', {'user_id': 1, 'buying_time': str(datetime.datetime.now()), 'price': 100})
         base.insert('orders', {'user_id': 3, 'buying_time': str(datetime.datetime.now()), 'price': 1000})
@@ -141,11 +180,14 @@ class Solution:
         base.update_user_by_id(7, {'age': 400, 'name': 'Ящер'})
 
 
-
-database = DatabaseManager('2324zadanie.db')
-Solution.creating_tables(database)
-Solution.primer_zapolneniya_tablici(database)
-Solution.updation_example(database)
-Solution.quires(database)
-Solution.deletion_example(database)
-database.close()
+if __name__ == '__main__':
+    database = DatabaseManager()
+    database.connection('23-24zadanie.db')
+    
+    Solution.creating_tables(database)
+    Solution.primer_zapolneniya_tablici(database)
+    Solution.updation_example(database)
+    Solution.quires(database)
+    Solution.deletion_example(database)
+    
+    database.close()
